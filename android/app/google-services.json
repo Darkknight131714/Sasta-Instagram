@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "62801400747",
+    "project_id": "image-tutorial-478aa",
+    "storage_bucket": "image-tutorial-478aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62801400747:android:7bf938eaa3dd045e8fb8ee",
+        "android_client_info": {
+          "package_name": "com.example.image_tutorial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62801400747-h8c9urj9qig4nc7lc13q2kpk9k8h4jba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqCg_VriyZvAtSKu7bCT7YGYZFygQeyMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62801400747-h8c9urj9qig4nc7lc13q2kpk9k8h4jba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

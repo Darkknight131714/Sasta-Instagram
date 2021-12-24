@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         children: [
           TextField(
+            textAlign: TextAlign.center,
             decoration: InputDecoration(
               hintText: "Name",
             ),
@@ -40,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           ),
           TextField(
+            textAlign: TextAlign.center,
             decoration: InputDecoration(
               hintText: "Email",
             ),
@@ -48,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           ),
           TextField(
+            textAlign: TextAlign.center,
             decoration: InputDecoration(
               hintText: "Password",
             ),
@@ -56,26 +59,36 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Functions functions = Functions();
-              functions.registerUser(email, password, name,
+              String value = await functions.registerUser(email, password, name,
                   Provider.of<CustomUser>(context, listen: false));
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
+              if (value == 'true') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              } else {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(value)));
+              }
             },
             child: Text("Register"),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Functions functions = Functions();
-              functions.signUser(email, password,
+              String value = await functions.signUser(email, password,
                   Provider.of<CustomUser>(context, listen: false));
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
+              if (value == 'true') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              } else {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(value)));
+              }
             },
             child: Text("Login"),
           ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_tutorial/main.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'backend.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'const.dart';
 
 ImagePicker picker = ImagePicker();
 
@@ -18,46 +20,113 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(Provider.of<CustomUser>(context).name),
-      ),
-      body: Center(
-          child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("imageurl").snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Text("HEHE No Image");
-          } else {
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: 50),
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Image.network(snapshot.data!.docs[index]['url']),
-                  subtitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black38,
+          title: Text(
+            "Sasta Instagram",
+            style: kTitle,
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                CupertinoIcons.chat_bubble_2,
+                size: 40,
+              ),
+            )
+          ],
+        ),
+        body: Center(
+            child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("imageurl")
+              .orderBy('count')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Text("HEHE No Image");
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  return Column(
                     children: [
-                      Text(snapshot.data!.docs[index]['name']),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("images/userprofile.png"),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              snapshot.data!.docs[index]['name'],
+                              style: kName,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Image.network(snapshot.data!.docs[index]['url']),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                CupertinoIcons.heart,
+                                size: 35,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                CupertinoIcons.chat_bubble,
+                                size: 35,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                CupertinoIcons.share,
+                                size: 35,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(
+                        indent: 100,
+                        endIndent: 100,
+                        thickness: 2,
+                        color: Colors.white,
+                      ),
                     ],
-                  ),
-                );
-              },
-            );
-          }
-        },
-      )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          XFile? image = await picker.pickImage(source: ImageSource.gallery);
-          if (image != null) {
-            Functions functions = Functions();
-            await functions.uploadImage(File(image.path),
-                Provider.of<CustomUser>(context, listen: false).name);
-          }
-        },
-        child: const Icon(Icons.add),
+                  );
+                },
+              );
+            }
+          },
+        )),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            XFile? image = await picker.pickImage(source: ImageSource.gallery);
+            if (image != null) {
+              Functions functions = Functions();
+              await functions.uploadImage(File(image.path),
+                  Provider.of<CustomUser>(context, listen: false).name);
+            }
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

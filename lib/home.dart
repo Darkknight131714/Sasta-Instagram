@@ -75,24 +75,63 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
-                                CupertinoIcons.heart,
-                                size: 35,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
+                          children: [
+                            Column(children: [
+                              IconButton(
+                                  onPressed: () async {
+                                    if (snapshot.data!.docs[index]['likedby']
+                                        .contains(Provider.of<CustomUser>(
+                                                context,
+                                                listen: false)
+                                            .email)) {
+                                      await snapshot.data!.docs[index].reference
+                                          .update({
+                                        'likedby': FieldValue.arrayRemove([
+                                          Provider.of<CustomUser>(context,
+                                                  listen: false)
+                                              .email
+                                        ]),
+                                      });
+                                    } else {
+                                      print(snapshot.data!.docs[index]
+                                          ['likedby']);
+                                      await snapshot.data!.docs[index].reference
+                                          .update({
+                                        'likedby': FieldValue.arrayUnion([
+                                          Provider.of<CustomUser>(context,
+                                                  listen: false)
+                                              .email
+                                        ]),
+                                      });
+                                    }
+                                  },
+                                  icon: snapshot.data!.docs[index]['likedby']
+                                          .contains(Provider.of<CustomUser>(
+                                                  context,
+                                                  listen: false)
+                                              .email)
+                                      ? Icon(
+                                          CupertinoIcons.heart_fill,
+                                          color: Colors.red,
+                                          size: 35,
+                                        )
+                                      : Icon(
+                                          CupertinoIcons.heart,
+                                          size: 35,
+                                        )),
+                              Text(
+                                  "${snapshot.data!.docs[index]['likedby'].length} likes"),
+                            ]),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
                                 CupertinoIcons.chat_bubble,
                                 size: 35,
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
                                 CupertinoIcons.share,
                                 size: 35,
                               ),

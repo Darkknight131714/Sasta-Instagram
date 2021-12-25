@@ -23,8 +23,11 @@ class Functions {
       await users.add({
         'name': name,
         'email': email,
+        'profile':
+            'https://firebasestorage.googleapis.com/v0/b/image-tutorial-478aa.appspot.com/o/images%2Fuserprofile.png?alt=media&token=cb23beca-1a21-4684-8d19-97aa09adcca6',
       });
-      user.changeUser(name, email);
+      user.changeUser(name, email,
+          'https://firebasestorage.googleapis.com/v0/b/image-tutorial-478aa.appspot.com/o/images%2Fuserprofile.png?alt=media&token=cb23beca-1a21-4684-8d19-97aa09adcca6');
       return 'true';
     } catch (e) {
       return e.toString();
@@ -41,7 +44,8 @@ class Functions {
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
-          user.changeUser(documentSnapshot['name'], email);
+          user.changeUser(
+              documentSnapshot['name'], email, documentSnapshot['profile']);
         });
       });
       return 'true';
@@ -77,6 +81,31 @@ class Functions {
 
   Future uploadUrl(String url, String name, int count) async {
     CollectionReference urls = firestore.collection("imageurl");
-    urls.add({'url': url, 'name': name, 'count': count});
+    urls.add({'url': url, 'name': name, 'count': count, 'likedby': []});
+  }
+
+  Future<String> uploadProfilePic(File file, String email) async {
+    String down = '';
+
+    FirebaseStorage _storage = FirebaseStorage.instance;
+    var uuid = Uuid();
+    String uid = uuid.v4();
+    Reference reference = _storage.ref().child("images/$uid");
+    UploadTask uploadTask = reference.putFile(file);
+    await uploadTask.then((res) async {
+      down = await res.ref.getDownloadURL();
+      await firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get()
+          .then((QuerySnapshot querysnapshot) {
+        for (var doc in querysnapshot.docs) {
+          doc.reference.update({
+            'profile': down,
+          });
+        }
+      });
+    });
+    return down;
   }
 }

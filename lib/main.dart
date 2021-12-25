@@ -26,9 +26,16 @@ class MyApp extends StatelessWidget {
 class CustomUser extends ChangeNotifier {
   String name = '';
   String email = '';
-  void changeUser(String newName, String newEmail) {
+  String profile = '';
+  void changeUser(String newName, String newEmail, String newprofile) {
     name = newName;
     email = newEmail;
+    profile = newprofile;
+    notifyListeners();
+  }
+
+  void changeProfile(String newprofile) {
+    profile = newprofile;
     notifyListeners();
   }
 }

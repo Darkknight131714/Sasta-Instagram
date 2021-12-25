@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (value == 'true') {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => SecondScreen()),
                 );
               } else {
                 ScaffoldMessenger.of(context)
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (value == 'true') {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => SecondScreen()),
                 );
               } else {
                 ScaffoldMessenger.of(context)

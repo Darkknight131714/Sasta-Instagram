@@ -7,8 +7,58 @@ import 'backend.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'const.dart';
+import 'profile.dart';
 
 ImagePicker picker = ImagePicker();
+List<Widget> screens = [
+  HomeScreen(),
+  ProfileScreen(),
+];
+
+class SecondScreen extends StatefulWidget {
+  const SecondScreen({Key? key}) : super(key: key);
+
+  @override
+  _SecondScreenState createState() => _SecondScreenState();
+}
+
+class _SecondScreenState extends State<SecondScreen> {
+  int curr = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        currentIndex: curr,
+        onTap: (index) {
+          setState(() {
+            curr = index;
+          });
+        },
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.black38,
+        title: Text(
+          "Sasta Instagram",
+          style: kTitle,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.chat_bubble_2,
+              size: 40,
+            ),
+          )
+        ],
+      ),
+      body: screens[curr],
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,22 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black38,
-          title: Text(
-            "Sasta Instagram",
-            style: kTitle,
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                CupertinoIcons.chat_bubble_2,
-                size: 40,
-              ),
-            )
-          ],
-        ),
         body: Center(
             child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
@@ -58,8 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("images/userprofile.png"),
+                              backgroundImage: NetworkImage(
+                                  Provider.of<CustomUser>(context).profile),
                             ),
                             SizedBox(
                               width: 10,

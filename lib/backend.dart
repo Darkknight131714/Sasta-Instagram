@@ -54,7 +54,8 @@ class Functions {
     }
   }
 
-  Future uploadImage(File file, String name) async {
+  Future uploadImage(
+      File file, String name, String profile, String email) async {
     String down = '';
 
     FirebaseStorage _storage = FirebaseStorage.instance;
@@ -75,13 +76,21 @@ class Functions {
           'imagecount': documentSnapshot['imagecount'] - 1,
         });
       });
-      uploadUrl(down, name, count);
+      uploadUrl(down, name, count, profile, email);
     });
   }
 
-  Future uploadUrl(String url, String name, int count) async {
+  Future uploadUrl(
+      String url, String name, int count, String profile, String email) async {
     CollectionReference urls = firestore.collection("imageurl");
-    urls.add({'url': url, 'name': name, 'count': count, 'likedby': []});
+    urls.add({
+      'url': url,
+      'name': name,
+      'count': count,
+      'likedby': [],
+      'profile': profile,
+      'email': email
+    });
   }
 
   Future<String> uploadProfilePic(File file, String email) async {
@@ -96,6 +105,17 @@ class Functions {
       down = await res.ref.getDownloadURL();
       await firestore
           .collection('users')
+          .where('email', isEqualTo: email)
+          .get()
+          .then((QuerySnapshot querysnapshot) {
+        for (var doc in querysnapshot.docs) {
+          doc.reference.update({
+            'profile': down,
+          });
+        }
+      });
+      await firestore
+          .collection('imageurl')
           .where('email', isEqualTo: email)
           .get()
           .then((QuerySnapshot querysnapshot) {

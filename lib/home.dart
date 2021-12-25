@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  Provider.of<CustomUser>(context).profile),
+                                  snapshot.data!.docs[index]['profile']),
                             ),
                             SizedBox(
                               width: 10,
@@ -194,8 +194,12 @@ class _HomeScreenState extends State<HomeScreen> {
             XFile? image = await picker.pickImage(source: ImageSource.gallery);
             if (image != null) {
               Functions functions = Functions();
-              await functions.uploadImage(File(image.path),
-                  Provider.of<CustomUser>(context, listen: false).name);
+              await functions.uploadImage(
+                File(image.path),
+                Provider.of<CustomUser>(context, listen: false).name,
+                Provider.of<CustomUser>(context, listen: false).profile,
+                Provider.of<CustomUser>(context, listen: false).email,
+              );
             }
           },
           child: const Icon(Icons.add),

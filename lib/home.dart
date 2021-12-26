@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_tutorial/main.dart';
@@ -8,6 +9,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'const.dart';
 import 'profile.dart';
+import 'login.dart';
 
 ImagePicker picker = ImagePicker();
 List<Widget> screens = [
@@ -52,7 +54,27 @@ class _SecondScreenState extends State<SecondScreen> {
               CupertinoIcons.chat_bubble_2,
               size: 40,
             ),
-          )
+          ),
+          IconButton(
+            onPressed: () {
+              FirebaseAuth auth = FirebaseAuth.instance;
+              print(auth.currentUser);
+              auth.signOut();
+              print(auth.currentUser);
+              Provider.of<CustomUser>(context, listen: false)
+                  .changeUser("", "", "");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.logout,
+              size: 40,
+            ),
+          ),
         ],
       ),
       body: screens[curr],

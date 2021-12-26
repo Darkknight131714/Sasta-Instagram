@@ -18,9 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Firebase.initializeApp().whenComplete(() {
-      setState(() {});
-    });
   }
 
   @override

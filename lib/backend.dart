@@ -128,4 +128,17 @@ class Functions {
     });
     return down;
   }
+
+  Future keepLoggedIn(String email, CustomUser user) async {
+    await firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((documentSnapshot) {
+        user.changeUser(
+            documentSnapshot['name'], email, documentSnapshot['profile']);
+      });
+    });
+  }
 }

@@ -20,3 +20,5 @@ const TextStyle kComment = TextStyle(
   fontWeight: FontWeight.w300,
   fontSize: 20,
 );
+
+const TextStyle kHeading = TextStyle(fontSize: 50, fontWeight: FontWeight.w800);

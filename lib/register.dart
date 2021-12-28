@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:image_tutorial/const.dart';
 import 'backend.dart';
-import 'home.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'main.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
-import 'register.dart';
+import 'const.dart';
+import 'home.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  String name = "", email = "", password = "";
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
+class _RegisterScreenState extends State<RegisterScreen> {
+  String email = '', name = '', password = '';
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,19 +32,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Text(
-                  "Welcome Back!",
+                  "Welcome",
                   style: kHeading,
                 ),
-                // TextField(
-                //   decoration: InputDecoration(
-                //     hintText: "Name",
-                //   ),
-                //   onChanged: (value) {
-                //     name = value;
-                //   },
-                // ),
-                SizedBox(
-                  height: 40,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: TextField(
+                    style: TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      hintStyle: TextStyle(color: Colors.black),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Username",
+                    ),
+                    onChanged: (value) {
+                      name = value;
+                    },
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -89,23 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     Functions functions = Functions();
-                //     String value = await functions.registerUser(email, password,
-                //         name, Provider.of<CustomUser>(context, listen: false));
-                //     if (value == 'true') {
-                //       Navigator.pushReplacement(
-                //         context,
-                //         MaterialPageRoute(builder: (context) => SecondScreen()),
-                //       );
-                //     } else {
-                //       ScaffoldMessenger.of(context)
-                //           .showSnackBar(SnackBar(content: Text(value)));
-                //     }
-                //   },
-                //   child: Text("Register"),
-                // ),
                 SizedBox(
                   height: 20,
                 ),
@@ -123,9 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   onPressed: () async {
                     Functions functions = Functions();
-                    String value = await functions.signUser(email, password,
-                        Provider.of<CustomUser>(context, listen: false));
+                    String value = await functions.registerUser(email, password,
+                        name, Provider.of<CustomUser>(context, listen: false));
                     if (value == 'true') {
+                      Navigator.pop(context);
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => SecondScreen()),
@@ -135,34 +119,56 @@ class _LoginScreenState extends State<LoginScreen> {
                           .showSnackBar(SnackBar(content: Text(value)));
                     }
                   },
-                  child: Text("Login"),
+                  child: Text("Sign Up"),
                 ),
-                SizedBox(
-                  height: 80,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Dont have an account?",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(color: Colors.orange, fontSize: 18),
-                      ),
-                    ),
-                  ],
-                ),
+
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.orange,
+                //     minimumSize: Size(120, 40),
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(10.0),
+                //       side: BorderSide(
+                //         color: Colors.transparent,
+                //         width: 2.0,
+                //       ),
+                //     ),
+                //   ),
+                //   onPressed: () async {
+                //     Functions functions = Functions();
+                //     String value = await functions.signUser(email, password,
+                //         Provider.of<CustomUser>(context, listen: false));
+                //     if (value == 'true') {
+                //       Navigator.pushReplacement(
+                //         context,
+                //         MaterialPageRoute(builder: (context) => SecondScreen()),
+                //       );
+                //     } else {
+                //       ScaffoldMessenger.of(context)
+                //           .showSnackBar(SnackBar(content: Text(value)));
+                //     }
+                //   },
+                //   child: Text("Login"),
+                // ),
+                // SizedBox(
+                //   height: 80,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       "Dont have an account?",
+                //       style: TextStyle(fontSize: 18),
+                //     ),
+                //     TextButton(
+                //       onPressed: () {},
+                //       child: Text(
+                //         "Sign Up",
+                //         style: TextStyle(color: Colors.orange, fontSize: 18),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

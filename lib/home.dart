@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'const.dart';
 import 'profile.dart';
 import 'login.dart';
+import 'comment.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 ImagePicker picker = ImagePicker();
 List<Widget> screens = [
@@ -30,11 +32,22 @@ class _SecondScreenState extends State<SecondScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                color: curr == 0 ? Colors.white : Colors.grey,
+              ),
+              label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                color: curr == 1 ? Colors.white : Colors.grey,
+              ),
+              label: 'Profile'),
         ],
         currentIndex: curr,
+        selectedItemColor: Colors.white,
         onTap: (index) {
           setState(() {
             curr = index;
@@ -127,59 +140,78 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Image.network(snapshot.data!.docs[index]['url']),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommentArea(
+                                  count: snapshot.data!.docs[index]['count']),
+                            ),
+                          );
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl: snapshot.data!.docs[index]['url'],
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Column(children: [
-                              IconButton(
-                                  onPressed: () async {
-                                    if (snapshot.data!.docs[index]['likedby']
+                            IconButton(
+                                onPressed: () async {
+                                  if (snapshot.data!.docs[index]['likedby']
+                                      .contains(Provider.of<CustomUser>(context,
+                                              listen: false)
+                                          .email)) {
+                                    await snapshot.data!.docs[index].reference
+                                        .update({
+                                      'likedby': FieldValue.arrayRemove([
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .email
+                                      ]),
+                                    });
+                                  } else {
+                                    await snapshot.data!.docs[index].reference
+                                        .update({
+                                      'likedby': FieldValue.arrayUnion([
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .email
+                                      ]),
+                                    });
+                                  }
+                                },
+                                icon: snapshot.data!.docs[index]['likedby']
                                         .contains(Provider.of<CustomUser>(
                                                 context,
                                                 listen: false)
-                                            .email)) {
-                                      await snapshot.data!.docs[index].reference
-                                          .update({
-                                        'likedby': FieldValue.arrayRemove([
-                                          Provider.of<CustomUser>(context,
-                                                  listen: false)
-                                              .email
-                                        ]),
-                                      });
-                                    } else {
-                                      print(snapshot.data!.docs[index]
-                                          ['likedby']);
-                                      await snapshot.data!.docs[index].reference
-                                          .update({
-                                        'likedby': FieldValue.arrayUnion([
-                                          Provider.of<CustomUser>(context,
-                                                  listen: false)
-                                              .email
-                                        ]),
-                                      });
-                                    }
-                                  },
-                                  icon: snapshot.data!.docs[index]['likedby']
-                                          .contains(Provider.of<CustomUser>(
-                                                  context,
-                                                  listen: false)
-                                              .email)
-                                      ? Icon(
-                                          CupertinoIcons.heart_fill,
-                                          color: Colors.red,
-                                          size: 35,
-                                        )
-                                      : Icon(
-                                          CupertinoIcons.heart,
-                                          size: 35,
-                                        )),
-                              Text(
-                                  "${snapshot.data!.docs[index]['likedby'].length} likes"),
-                            ]),
+                                            .email)
+                                    ? Icon(
+                                        CupertinoIcons.heart_fill,
+                                        color: Colors.red,
+                                        size: 35,
+                                      )
+                                    : Icon(
+                                        CupertinoIcons.heart,
+                                        size: 35,
+                                      )),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CommentArea(
+                                        count: snapshot.data!.docs[index]
+                                            ['count']),
+                                  ),
+                                );
+                              },
                               icon: Icon(
                                 CupertinoIcons.chat_bubble,
                                 size: 35,
@@ -192,6 +224,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 35,
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            Text(
+                                "${snapshot.data!.docs[index]['likedby'].length} likes"),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            Text(
+                                "${snapshot.data!.docs[index]['comment'].length} comments"),
                           ],
                         ),
                       ),

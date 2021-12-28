@@ -83,13 +83,15 @@ class Functions {
   Future uploadUrl(
       String url, String name, int count, String profile, String email) async {
     CollectionReference urls = firestore.collection("imageurl");
-    urls.add({
+    await urls.add({
       'url': url,
       'name': name,
       'count': count,
       'likedby': [],
       'profile': profile,
-      'email': email
+      'email': email,
+      'comment': [],
+      'commentuser': [],
     });
   }
 
@@ -138,6 +140,25 @@ class Functions {
       querySnapshot.docs.forEach((documentSnapshot) {
         user.changeUser(
             documentSnapshot['name'], email, documentSnapshot['profile']);
+      });
+    });
+  }
+
+  Future addComment(String comment, String name, int count) async {
+    await firestore
+        .collection('imageurl')
+        .where('count', isEqualTo: count)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((documentSnapshot) async {
+        List<dynamic> commenti = documentSnapshot['comment'];
+        List<dynamic> namei = documentSnapshot['commentuser'];
+        namei.add(name);
+        commenti.add(comment);
+        await documentSnapshot.reference.update({
+          'comment': commenti,
+          'commentuser': namei,
+        });
       });
     });
   }

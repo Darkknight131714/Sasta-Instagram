@@ -107,7 +107,11 @@ class _CommentAreaState extends State<CommentArea> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            Functions func = Functions();
+                            await func
+                                .shareImage(snapshot.data!.docs[0]['url']);
+                          },
                           icon: Icon(
                             CupertinoIcons.share,
                             size: 35,

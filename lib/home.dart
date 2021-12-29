@@ -230,7 +230,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                Functions func = Functions();
+                                await func.shareImage(
+                                    snapshot.data!.docs[index]['url']);
+                              },
                               icon: Icon(
                                 CupertinoIcons.share,
                                 size: 35,

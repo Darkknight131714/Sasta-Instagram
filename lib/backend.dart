@@ -7,6 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'main.dart';
 import 'dart:io';
 import 'package:uuid/uuid.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 String signedUsername = '';
 
@@ -180,5 +183,17 @@ class Functions {
         });
       });
     });
+  }
+
+  Future shareImage(String Imageurl) async {
+    var uuid = Uuid();
+    String uid = uuid.v4();
+    final url = Uri.parse(Imageurl);
+    final response = await http.get(url);
+    final bytes = response.bodyBytes;
+    final temp = await getTemporaryDirectory();
+    final path = '${temp.path}/${uid}.jpg';
+    File(path).writeAsBytesSync(bytes);
+    await Share.shareFiles([path], text: 'Hey there');
   }
 }

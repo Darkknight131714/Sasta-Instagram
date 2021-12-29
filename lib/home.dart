@@ -12,6 +12,7 @@ import 'profile.dart';
 import 'login.dart';
 import 'comment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'anotherprofile.dart';
 
 ImagePicker picker = ImagePicker();
 List<Widget> screens = [
@@ -75,7 +76,7 @@ class _SecondScreenState extends State<SecondScreen> {
               auth.signOut();
               print(auth.currentUser);
               Provider.of<CustomUser>(context, listen: false)
-                  .changeUser("", "", "");
+                  .changeUser("", "", "", '');
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -124,20 +125,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  snapshot.data!.docs[index]['profile']),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              snapshot.data!.docs[index]['name'],
-                              style: kName,
-                            ),
-                          ],
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AnotherProfileScreen(
+                                    email: snapshot.data!.docs[index]['email']),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    snapshot.data!.docs[index]['profile']),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                snapshot.data!.docs[index]['name'],
+                                style: kName,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       GestureDetector(

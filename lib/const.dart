@@ -22,3 +22,20 @@ const TextStyle kComment = TextStyle(
 );
 
 const TextStyle kHeading = TextStyle(fontSize: 50, fontWeight: FontWeight.w800);
+
+const TextStyle kBioChange = TextStyle(
+  fontWeight: FontWeight.w600,
+  fontSize: 30,
+);
+const TextStyle kBioTitle = TextStyle(
+  fontWeight: FontWeight.w500,
+  fontSize: 50,
+);
+const TextStyle kBio = TextStyle(
+  fontWeight: FontWeight.w400,
+  fontSize: 40,
+);
+const TextStyle kBioProfile = TextStyle(
+  fontWeight: FontWeight.w600,
+  fontSize: 30,
+);

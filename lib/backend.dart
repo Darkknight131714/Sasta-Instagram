@@ -25,9 +25,13 @@ class Functions {
         'email': email,
         'profile':
             'https://firebasestorage.googleapis.com/v0/b/image-tutorial-478aa.appspot.com/o/images%2Fuserprofile.png?alt=media&token=cb23beca-1a21-4684-8d19-97aa09adcca6',
+        'bio': '',
       });
-      user.changeUser(name, email,
-          'https://firebasestorage.googleapis.com/v0/b/image-tutorial-478aa.appspot.com/o/images%2Fuserprofile.png?alt=media&token=cb23beca-1a21-4684-8d19-97aa09adcca6');
+      user.changeUser(
+          name,
+          email,
+          'https://firebasestorage.googleapis.com/v0/b/image-tutorial-478aa.appspot.com/o/images%2Fuserprofile.png?alt=media&token=cb23beca-1a21-4684-8d19-97aa09adcca6',
+          '');
       return 'true';
     } catch (e) {
       return e.toString();
@@ -44,8 +48,8 @@ class Functions {
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
-          user.changeUser(
-              documentSnapshot['name'], email, documentSnapshot['profile']);
+          user.changeUser(documentSnapshot['name'], email,
+              documentSnapshot['profile'], documentSnapshot['bio']);
         });
       });
       return 'true';
@@ -138,8 +142,8 @@ class Functions {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((documentSnapshot) {
-        user.changeUser(
-            documentSnapshot['name'], email, documentSnapshot['profile']);
+        user.changeUser(documentSnapshot['name'], email,
+            documentSnapshot['profile'], documentSnapshot['bio']);
       });
     });
   }
@@ -158,6 +162,21 @@ class Functions {
         await documentSnapshot.reference.update({
           'comment': commenti,
           'commentuser': namei,
+        });
+      });
+    });
+  }
+
+  Future changeBio(String bio, CustomUser useri) async {
+    useri.changeBio(bio);
+    await firestore
+        .collection('users')
+        .where('email', isEqualTo: useri.email)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((documentSnapshot) async {
+        await documentSnapshot.reference.update({
+          'bio': bio,
         });
       });
     });

@@ -61,15 +61,23 @@ class CustomUser extends ChangeNotifier {
   String name = '';
   String email = '';
   String profile = '';
-  void changeUser(String newName, String newEmail, String newprofile) {
+  String bio = '';
+  void changeUser(
+      String newName, String newEmail, String newprofile, String newbio) {
     name = newName;
     email = newEmail;
     profile = newprofile;
+    bio = newbio;
     notifyListeners();
   }
 
   void changeProfile(String newprofile) {
     profile = newprofile;
+    notifyListeners();
+  }
+
+  void changeBio(String newbio) {
+    bio = newbio;
     notifyListeners();
   }
 }

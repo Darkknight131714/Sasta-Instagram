@@ -64,13 +64,11 @@ class _MessageScreenState extends State<MessageScreen> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Flexible(
-                                child: Text(
-                                  snapshot.data!.docs[index]['message'],
-                                  maxLines: 5,
-                                  softWrap: true,
-                                  style: kChat,
-                                ),
+                              child: Text(
+                                snapshot.data!.docs[index]['message'],
+                                maxLines: 5,
+                                softWrap: true,
+                                style: kChat,
                               ),
                             ),
                           ),

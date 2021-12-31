@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     Provider.of<CustomUser>(context,
                                             listen: false)
                                         .email) {
-                                  index++;
+                                  return Container();
                                 }
                                 return ListTile(
                                   onTap: () async {

@@ -48,6 +48,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             return ListView.builder(
                               itemCount: snapshot.data!.size,
                               itemBuilder: (context, index) {
+                                if (snapshot.data!.docs[index]['email'] ==
+                                    Provider.of<CustomUser>(context,
+                                            listen: false)
+                                        .email) {
+                                  index++;
+                                }
                                 return ListTile(
                                   onTap: () async {
                                     Functions func = Functions();

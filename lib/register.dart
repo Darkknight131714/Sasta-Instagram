@@ -121,54 +121,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   child: Text("Sign Up"),
                 ),
-
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Colors.orange,
-                //     minimumSize: Size(120, 40),
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(10.0),
-                //       side: BorderSide(
-                //         color: Colors.transparent,
-                //         width: 2.0,
-                //       ),
-                //     ),
-                //   ),
-                //   onPressed: () async {
-                //     Functions functions = Functions();
-                //     String value = await functions.signUser(email, password,
-                //         Provider.of<CustomUser>(context, listen: false));
-                //     if (value == 'true') {
-                //       Navigator.pushReplacement(
-                //         context,
-                //         MaterialPageRoute(builder: (context) => SecondScreen()),
-                //       );
-                //     } else {
-                //       ScaffoldMessenger.of(context)
-                //           .showSnackBar(SnackBar(content: Text(value)));
-                //     }
-                //   },
-                //   child: Text("Login"),
-                // ),
-                // SizedBox(
-                //   height: 80,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Text(
-                //       "Dont have an account?",
-                //       style: TextStyle(fontSize: 18),
-                //     ),
-                //     TextButton(
-                //       onPressed: () {},
-                //       child: Text(
-                //         "Sign Up",
-                //         style: TextStyle(color: Colors.orange, fontSize: 18),
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),

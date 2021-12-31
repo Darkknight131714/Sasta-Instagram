@@ -13,6 +13,7 @@ import 'login.dart';
 import 'comment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'anotherprofile.dart';
+import 'chat.dart';
 
 ImagePicker picker = ImagePicker();
 List<Widget> screens = [
@@ -63,7 +64,14 @@ class _SecondScreenState extends State<SecondScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(),
+                ),
+              );
+            },
             icon: Icon(
               CupertinoIcons.chat_bubble_2,
               size: 40,

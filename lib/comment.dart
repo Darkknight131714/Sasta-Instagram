@@ -157,9 +157,11 @@ class _CommentAreaState extends State<CommentArea> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text(
-                              snapshot.data!.docs[0]['comment'][index],
-                              style: kComment,
+                            Flexible(
+                              child: Text(
+                                snapshot.data!.docs[0]['comment'][index],
+                                style: kComment,
+                              ),
                             ),
                           ],
                         );

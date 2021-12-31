@@ -196,4 +196,60 @@ class Functions {
     File(path).writeAsBytesSync(bytes);
     await Share.shareFiles([path], text: 'Hey there');
   }
+
+  Future sendMessage(String message, String sender, String receiver) async {
+    await firestore.collection('chats').doc(sender).collection(receiver).add({
+      'message': message,
+      'sender': sender,
+      'time': Timestamp.now(),
+    });
+    await firestore.collection('chats').doc(receiver).collection(sender).add({
+      'message': message,
+      'sender': sender,
+      'time': Timestamp.now(),
+    });
+  }
+
+  Future chatPersonNew(String email, String otheremail) async {
+    await firestore
+        .collection('chats')
+        .doc(email)
+        .get()
+        .then((DocumentSnapshot doc) {
+      if (doc.exists) {
+        if (doc['people'].contains(otheremail)) {
+          return;
+        }
+        doc.reference.set({
+          'number': doc['number'] + 1,
+          'people': FieldValue.arrayUnion([otheremail]),
+        }, SetOptions(merge: true));
+      } else {
+        doc.reference.set({
+          'number': 1,
+          'people': [otheremail]
+        }, SetOptions(merge: true));
+      }
+    });
+    await firestore
+        .collection('chats')
+        .doc(otheremail)
+        .get()
+        .then((DocumentSnapshot doc) {
+      if (doc.exists) {
+        if (doc['people'].contains(email)) {
+          return;
+        }
+        doc.reference.set({
+          'number': doc['number'] + 1,
+          'people': FieldValue.arrayUnion([email]),
+        }, SetOptions(merge: true));
+      } else {
+        doc.reference.set({
+          'number': 1,
+          'people': [email],
+        }, SetOptions(merge: true));
+      }
+    });
+  }
 }

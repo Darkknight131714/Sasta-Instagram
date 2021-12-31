@@ -39,3 +39,7 @@ const TextStyle kBioProfile = TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 30,
 );
+const TextStyle kChat = TextStyle(
+  fontWeight: FontWeight.w500,
+  fontSize: 20,
+);

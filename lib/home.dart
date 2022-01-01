@@ -170,12 +170,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
-                        child: CachedNetworkImage(
-                          imageUrl: snapshot.data!.docs[index]['url'],
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                        child: InteractiveViewer(
+                          child: CachedNetworkImage(
+                            imageUrl: snapshot.data!.docs[index]['url'],
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                          maxScale: 3,
                         ),
                       ),
                       Padding(

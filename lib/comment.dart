@@ -54,10 +54,14 @@ class _CommentAreaState extends State<CommentArea> {
                       ],
                     ),
                   ),
-                  CachedNetworkImage(
-                    imageUrl: snapshot.data!.docs[0]['url'],
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  InteractiveViewer(
+                    child: CachedNetworkImage(
+                      imageUrl: snapshot.data!.docs[0]['url'],
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                    maxScale: 3,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

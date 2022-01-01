@@ -39,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: TextField(
                     style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -56,6 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: TextField(
+                    keyboardType: TextInputType.emailAddress,
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -74,6 +76,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: TextField(
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(

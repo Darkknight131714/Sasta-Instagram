@@ -287,20 +287,108 @@ class _HomeScreenState extends State<HomeScreen> {
         )),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            XFile? image = await picker.pickImage(source: ImageSource.gallery);
-            if (image != null) {
-              Functions functions = Functions();
-              await functions.uploadImage(
-                File(image.path),
-                Provider.of<CustomUser>(context, listen: false).name,
-                Provider.of<CustomUser>(context, listen: false).profile,
-                Provider.of<CustomUser>(context, listen: false).email,
-              );
-            }
+            showModalBottomSheet(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(25.0))),
+                context: context,
+                builder: (BuildContext context) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.camera,
+                                    size: 50,
+                                  ),
+                                  onPressed: () async {
+                                    XFile? image = await picker.pickImage(
+                                        source: ImageSource.camera);
+                                    if (image != null) {
+                                      Functions functions = Functions();
+                                      await functions.uploadImage(
+                                        File(image.path),
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .name,
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .profile,
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .email,
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
+                              ),
+                              Text("   Camera"),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.picture_in_picture,
+                                    size: 50,
+                                  ),
+                                  onPressed: () async {
+                                    XFile? image = await picker.pickImage(
+                                        source: ImageSource.gallery);
+                                    if (image != null) {
+                                      Functions functions = Functions();
+                                      await functions.uploadImage(
+                                        File(image.path),
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .name,
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .profile,
+                                        Provider.of<CustomUser>(context,
+                                                listen: false)
+                                            .email,
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
+                              ),
+                              Text("     Gallery"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                });
           },
           child: const Icon(Icons.add),
         ),
       ),
     );
+  }
+
+  Future gallery() async {
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      Functions functions = Functions();
+      await functions.uploadImage(
+        File(image.path),
+        Provider.of<CustomUser>(context, listen: false).name,
+        Provider.of<CustomUser>(context, listen: false).profile,
+        Provider.of<CustomUser>(context, listen: false).email,
+      );
+    }
   }
 }

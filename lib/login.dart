@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: TextField(
                     style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -75,6 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: TextField(
                     style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -89,23 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     Functions functions = Functions();
-                //     String value = await functions.registerUser(email, password,
-                //         name, Provider.of<CustomUser>(context, listen: false));
-                //     if (value == 'true') {
-                //       Navigator.pushReplacement(
-                //         context,
-                //         MaterialPageRoute(builder: (context) => SecondScreen()),
-                //       );
-                //     } else {
-                //       ScaffoldMessenger.of(context)
-                //           .showSnackBar(SnackBar(content: Text(value)));
-                //     }
-                //   },
-                //   child: Text("Register"),
-                // ),
                 SizedBox(
                   height: 20,
                 ),

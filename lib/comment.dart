@@ -188,6 +188,13 @@ class _CommentAreaState extends State<CommentArea> {
                                   .name,
                               widget.count);
                           myController.clear();
+                          String email =
+                              Provider.of<CustomUser>(context, listen: false)
+                                  .email;
+                          await func.sendNotif(
+                              "MAMA MIA🗣️🥳🙌",
+                              "$email commented on your Post",
+                              snapshot.data!.docs[0]['email']);
                         },
                         child: Text("Post"),
                       ),

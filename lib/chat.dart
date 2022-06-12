@@ -100,16 +100,24 @@ class _ChatScreenState extends State<ChatScreen> {
               return ListView.builder(
                 itemCount: snapshot.data!['number'],
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MessageScreen(
-                                otherEmail: snapshot.data!['people'][index])),
-                      );
-                    },
-                    title: Text(snapshot.data!['people'][index]),
+                  return Card(
+                    child: ListTile(
+                      onTap: () async {
+                        List<dynamic> arr = snapshot.data!['read'];
+                        arr[index] = true;
+                        snapshot.data!.reference.update({'read': arr});
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MessageScreen(
+                                  otherEmail: snapshot.data!['people'][index])),
+                        );
+                      },
+                      title: Text(snapshot.data!['people'][index]),
+                      leading: snapshot.data!['read'][index]
+                          ? Icon(Icons.check_circle)
+                          : Icon(Icons.notifications_active),
+                    ),
                   );
                 },
               );

@@ -112,10 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     String value = await functions.signUser(email, password,
                         Provider.of<CustomUser>(context, listen: false));
                     if (value == 'true') {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SecondScreen()),
-                      );
                     } else {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(value)));

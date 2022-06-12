@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_tutorial/main.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'backend.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +32,40 @@ class SecondScreen extends StatefulWidget {
 }
 
 class _SecondScreenState extends State<SecondScreen> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage m) {
+      String info = m.notification!.body.toString();
+      String title = m.notification!.title.toString();
+      if (title == "NEW MESSAGE!🥳🥳Congratz you are not alone.") {
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(message: info),
+          displayDuration: Duration(seconds: 1),
+        );
+      } else if (title == "WEEEEE❤️💕") {
+        showTopSnackBar(
+          context,
+          CustomSnackBar.info(message: info),
+          displayDuration: Duration(seconds: 1),
+        );
+      } else if (title == "MAMA MIA🗣️🥳🙌") {
+        showTopSnackBar(
+          context,
+          CustomSnackBar.info(message: info),
+          displayDuration: Duration(seconds: 1),
+        );
+      } else if (title == 'WOOHOOO😎🙄') {
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(message: info),
+          displayDuration: Duration(seconds: 1),
+        );
+      }
+    });
+  }
+
   int curr = 0;
   @override
   Widget build(BuildContext context) {
@@ -80,17 +117,12 @@ class _SecondScreenState extends State<SecondScreen> {
           IconButton(
             onPressed: () {
               FirebaseAuth auth = FirebaseAuth.instance;
-              print(auth.currentUser);
+              String temp = auth.currentUser!.email.toString();
+              temp = temp.replaceAll('@', '_');
+              FirebaseMessaging.instance.unsubscribeFromTopic(temp);
               auth.signOut();
-              print(auth.currentUser);
               Provider.of<CustomUser>(context, listen: false)
                   .changeUser("", "", "", '');
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
             },
             icon: Icon(
               Icons.logout,
@@ -208,6 +240,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .email
                                       ]),
                                     });
+                                    String email = Provider.of<CustomUser>(
+                                            context,
+                                            listen: false)
+                                        .email;
+                                    Functions func = Functions();
+                                    await func.sendNotif(
+                                        "WEEEEE❤️💕",
+                                        "Your Post was liked by $email",
+                                        snapshot.data!.docs[index]['email']);
                                   }
                                 },
                                 icon: snapshot.data!.docs[index]['likedby']

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +12,7 @@ import 'package:uuid/uuid.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 String signedUsername = '';
 
@@ -100,6 +103,8 @@ class Functions {
       'comment': [],
       'commentuser': [],
     });
+    await sendNotif('WOOHOOO😎🙄',
+        "$email just posted something. Check it out.", "post" + email);
   }
 
   Future<String> uploadProfilePic(File file, String email) async {
@@ -198,6 +203,25 @@ class Functions {
   }
 
   Future sendMessage(String message, String sender, String receiver) async {
+    Uri url = Uri.parse("https://fcm.googleapis.com/fcm/send");
+    String temp = receiver;
+    temp = temp.replaceAll('@', '_');
+    Map<String, dynamic> m = {
+      "to": "/topics/${temp}",
+      "notification": {
+        "body": "You have a new message from ${sender}",
+        "title": "NEW MESSAGE!🥳🥳Congratz you are not alone.",
+      },
+      "body": "You have a new message from ${sender}",
+      "title": "NEW MESSAGE!🥳🥳Congratz you are not alone.",
+      "mutable_content": true,
+      "sound": "Tri-tone"
+    };
+    var resp = await http.post(url, body: jsonEncode(m), headers: {
+      "Authorization":
+          "key=AAAADp9BU6s:APA91bGreZaHcnuCawKiZO6scwaFjLoAk8lzU66kC0IRw1vEley7RnKZURZDB7LxwO_hnGD6ARKcvevwt9uVnDzxXT1D9DaPpjAiKK9js75U0rTejDNageUqIQefvRu1FU_wmOvYDZ32",
+      "Content-Type": "application/json"
+    });
     await firestore.collection('chats').doc(sender).collection(receiver).add({
       'message': message,
       'sender': sender,
@@ -207,6 +231,41 @@ class Functions {
       'message': message,
       'sender': sender,
       'time': Timestamp.now(),
+    });
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(receiver)
+        .get();
+    int numb = doc['number'];
+    for (int i = 0; i < numb; i++) {
+      if (doc['people'][i] == sender) {
+        List<dynamic> arr = doc['read'];
+        arr[i] = false;
+        doc.reference.update({'read': arr});
+        break;
+      }
+    }
+  }
+
+  Future<void> sendNotif(String title, String body, String receiver) async {
+    Uri url = Uri.parse("https://fcm.googleapis.com/fcm/send");
+    String temp = receiver;
+    temp = temp.replaceAll('@', '_');
+    Map<String, dynamic> m = {
+      "to": "/topics/${temp}",
+      "notification": {
+        "body": body,
+        "title": title,
+      },
+      "body": body,
+      "title": title,
+      "mutable_content": true,
+      "sound": "Tri-tone"
+    };
+    var resp = await http.post(url, body: jsonEncode(m), headers: {
+      "Authorization":
+          "key=AAAADp9BU6s:APA91bGreZaHcnuCawKiZO6scwaFjLoAk8lzU66kC0IRw1vEley7RnKZURZDB7LxwO_hnGD6ARKcvevwt9uVnDzxXT1D9DaPpjAiKK9js75U0rTejDNageUqIQefvRu1FU_wmOvYDZ32",
+      "Content-Type": "application/json"
     });
   }
 
@@ -220,14 +279,18 @@ class Functions {
         if (doc['people'].contains(otheremail)) {
           return;
         }
+        List<dynamic> temp = doc['read'];
+        temp.add(true);
         doc.reference.set({
           'number': doc['number'] + 1,
           'people': FieldValue.arrayUnion([otheremail]),
+          'read': temp,
         }, SetOptions(merge: true));
       } else {
         doc.reference.set({
           'number': 1,
-          'people': [otheremail]
+          'people': [otheremail],
+          'read': [true],
         }, SetOptions(merge: true));
       }
     });
@@ -240,14 +303,18 @@ class Functions {
         if (doc['people'].contains(email)) {
           return;
         }
+        List<dynamic> temp = doc['read'];
+        temp.add(true);
         doc.reference.set({
           'number': doc['number'] + 1,
           'people': FieldValue.arrayUnion([email]),
+          'read': temp,
         }, SetOptions(merge: true));
       } else {
         doc.reference.set({
           'number': 1,
           'people': [email],
+          'read': [true],
         }, SetOptions(merge: true));
       }
     });

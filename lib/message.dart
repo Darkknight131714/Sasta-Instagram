@@ -84,12 +84,14 @@ class _MessageScreenState extends State<MessageScreen> {
                       suffix: IconButton(
                         onPressed: () async {
                           Functions func = Functions();
-                          await func.sendMessage(
-                              text,
-                              Provider.of<CustomUser>(context, listen: false)
-                                  .email,
-                              widget.otherEmail);
                           controller.clear();
+                          if (text != "") {
+                            await func.sendMessage(
+                                text,
+                                Provider.of<CustomUser>(context, listen: false)
+                                    .email,
+                                widget.otherEmail);
+                          }
                         },
                         icon: Icon(
                           Icons.send,

@@ -191,10 +191,13 @@ class _CommentAreaState extends State<CommentArea> {
                           String email =
                               Provider.of<CustomUser>(context, listen: false)
                                   .email;
-                          await func.sendNotif(
-                              "MAMA MIA🗣️🥳🙌",
-                              "$email commented on your Post",
-                              snapshot.data!.docs[0]['email']);
+                          if (email != snapshot.data!.docs[0]['email']) {
+                            Functions func = Functions();
+                            await func.sendNotif(
+                                "MAMA MIA🗣️🥳🙌",
+                                "$email commented on your Post",
+                                snapshot.data!.docs[0]['email']);
+                          }
                         },
                         child: Text("Post"),
                       ),

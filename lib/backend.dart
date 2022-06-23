@@ -319,4 +319,8 @@ class Functions {
       }
     });
   }
+
+  Future<void> delete(String url) async {
+    FirebaseStorage.instance.refFromURL(url).delete();
+  }
 }

@@ -176,18 +176,65 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    snapshot.data!.docs[index]['profile']),
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        snapshot.data!.docs[index]['profile']),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    snapshot.data!.docs[index]['name'],
+                                    style: kName,
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                snapshot.data!.docs[index]['name'],
-                                style: kName,
-                              ),
+                              if (snapshot.data!.docs[index]['email'] ==
+                                  Provider.of<CustomUser>(context,
+                                          listen: false)
+                                      .email)
+                                IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: Text(
+                                                "Are you sure you want to delete this post?"),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  Functions func =
+                                                      new Functions();
+                                                  String url = snapshot
+                                                      .data!.docs[index]['url'];
+                                                  await snapshot.data!
+                                                      .docs[index].reference
+                                                      .delete();
+                                                  await func.delete(url);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("Yes"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("No"),
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                )
                             ],
                           ),
                         ),
@@ -244,11 +291,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                             context,
                                             listen: false)
                                         .email;
-                                    Functions func = Functions();
-                                    await func.sendNotif(
-                                        "WEEEEE❤️💕",
-                                        "Your Post was liked by $email",
-                                        snapshot.data!.docs[index]['email']);
+                                    if (email !=
+                                        snapshot.data!.docs[index]['email']) {
+                                      Functions func = Functions();
+                                      await func.sendNotif(
+                                          "WEEEEE❤️💕",
+                                          "Your Post was liked by $email",
+                                          snapshot.data!.docs[index]['email']);
+                                    }
                                   }
                                 },
                                 icon: snapshot.data!.docs[index]['likedby']

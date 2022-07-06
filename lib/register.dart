@@ -114,10 +114,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         name, Provider.of<CustomUser>(context, listen: false));
                     if (value == 'true') {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SecondScreen()),
-                      );
                     } else {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(value)));

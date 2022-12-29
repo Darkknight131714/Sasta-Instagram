@@ -4,6 +4,8 @@ import 'package:image_tutorial/backend.dart';
 import 'package:image_tutorial/const.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessageScreen extends StatefulWidget {
   String otherEmail;
@@ -64,12 +66,21 @@ class _MessageScreenState extends State<MessageScreen> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                snapshot.data!.docs[index]['message'],
-                                maxLines: 5,
-                                softWrap: true,
+                              child: Linkify(
+                                onOpen: (link) async {
+                                  Uri url = Uri.parse(link.url);
+                                  await launchUrl(url);
+                                },
+                                text: snapshot.data!.docs[index]['message'],
                                 style: kChat,
+                                maxLines: 5,
                               ),
+                              // child: Text(
+                              //   snapshot.data!.docs[index]['message'],
+                              //   maxLines: 5,
+                              //   softWrap: true,
+                              //   style: kChat,
+                              // ),
                             ),
                           ),
                         ),
